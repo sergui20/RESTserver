@@ -1,37 +1,21 @@
-require('./config/config');
+require('./config/config'); // Defining the port, it can be and environment port or a localhost port
 
-const express = require('express');
-const app = express();
+const express = require('express'); // A web infraestructure
+const mongoose = require('mongoose'); // To model our aplication data
 
-const bodyParser = require('body-parser');
+const app = express(); // Declaring express function
 
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
+app.use(express.urlencoded({ extended: false })) // Middleware: URL enconding converts characters into a format that can be transmitted over the internet
+app.use(express.json()) //Middleware: Use json format 
 
-app.get('/usuario', (req, res)=> {
-	res.json('Get usuario');
-});
+app.use(require('./routes/usuario')); //Requiring the web routes
 
-app.post('/usuario', (req, res)=> {
-	let body = req.body;
+mongoose.connect(process.env.URLDB, (err, res)=>{ // To connect our server to our database
+	if (err) throw err;
 
-	res.json({
-		persona: body
-	});
-});
+	console.log('Base de datos online');
+})
 
-app.put('/usuario/:id', (req, res)=> {
-	let id = req.params.id;
-
-	res.json({
-		id
-	});
-});
-
-app.delete('/usuario', (req, res)=> {
-	res.json('Delete usuario');
-});
-
-app.listen(process.env.PORT, ()=> {
-	console.log('Escuchando en el puerto 3000');
+app.listen(process.env.PORT, ()=> { //Listening on a specific port
+	console.log(`Escuchando en el puerto ${process.env.PORT}`);
 });
