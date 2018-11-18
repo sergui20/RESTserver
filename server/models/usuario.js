@@ -42,7 +42,7 @@ let usuarioSchema = new Schema({ //Defining our model
 });
 
 usuarioSchema.methods.toJSON = function () { //Esto seria un Middleware segun yo. toJSON se ejecuta al covertir mis documentos a JSON format automaticamente, es por eso que es una funcion
-	let user = this; // this hace referencia al documento que sera guardado en la base de datos, esto ocurre antes de eso
+	let user = this; // this hace referencia al documento que lo obtenemos para eliminar ciertos parametros para mostrarlos al cliente
 	let userObject = user.toObject(); // Convertimos nuestro documento en un objeto para poder manipularlo
 	delete userObject.password; // Borramos la instancia password de nuestro objeto para que no aparezaca en la base de datos
 

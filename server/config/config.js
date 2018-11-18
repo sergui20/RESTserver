@@ -17,3 +17,8 @@ if (process.env.NODE_ENV === 'dev') {
 }								   // MONGO_URL es una instancia definida en el entorno de heroku para no mostrar nuestro usuario y contrasena en produccion	
 
 process.env.URLDB = urlDB; // Esta sera la URL que usaremos en mongoose.connect para conectarnos ya local o globalmente.
+
+// Token config
+
+process.env.TOKEN_EXPIRE = 60 * 60 * 24 * 30; // Creamos variables de entorno para no mostrarlas al publico
+process.env.SEED_TOKEN = process.env.SEED_TOKEN || 'secret-SMlocal'; // Declaramos una variable global para nuestro SEED

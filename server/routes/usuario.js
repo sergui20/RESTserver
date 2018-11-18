@@ -4,8 +4,10 @@ const _ = require('underscore'); // Libreria que nos permite manipular objetos y
 const Usuario = require('../models/usuario');
 const app = express();
 
-app.get('/usuario', (req, res)=> {
-	let from = req.query.from || 0;
+const { authorizationToken, authorizationAdmin } = require('../middlewares/author'); // Requerimos el middleware para combrobar si el token generado en /signin sigue siendo el mismo y poder darle acceso a mas rutas al usuario
+
+app.get('/usuario', authorizationToken, (req, res)=> {
+	let from = req.query.from || 0; // req.query hace referencia a una consulta, en este caso se encuentra en la url, y la podemos cambiar desde alli
 	from = Number(from);
 
 	let limit = req.query.limit || 5;
@@ -34,8 +36,8 @@ app.get('/usuario', (req, res)=> {
 	})
 });
 
-app.post('/usuario', (req, res)=> {
-	let body = req.body;
+app.post('/usuario', [authorizationToken, authorizationAdmin], (req, res)=> {
+	let body = req.body; // Requiriendo el cuerpo de la peticion, donde se encuentra almacenado los documentos de nuestra base de datos
 
 	let usuario = new Usuario({
 		nombre: body.nombre,
@@ -52,14 +54,14 @@ app.post('/usuario', (req, res)=> {
 			});
 		}
 
-		res.json({ //Showing the response to the client with json format
-			ok:true,
+		res.json({ //Showing the response to the client with json format. Aqui es donde se ejecuta el metodo toJSON definido en el esquema para eliminar el parametro password para que no sea mostrada
+			ok:true, 
 			usuario: usuarioDB
 		})
 	});
 });
-
-app.put('/usuario/:id', (req, res)=> {
+ 
+app.put('/usuario/:id', [authorizationToken, authorizationAdmin], (req, res)=> { // PUT actualiza los datos de los documentos de nuestra base de datos
 	let id = req.params.id;
 	console.log(req.body)
 	let body = _.pick(req.body, ['nombre', 'email', 'img', 'role', 'status']); // Elegimos las instancias del documento que si pueden serv cambiadas
@@ -83,7 +85,7 @@ app.put('/usuario/:id', (req, res)=> {
 
 });
 
-app.delete('/usuario/:id', (req, res)=> {
+app.delete('/usuario/:id', [authorizationToken, authorizationAdmin], (req, res)=> { //delete elimina datos, pero en este caso lo usamos para cambiar el estado de nuestros documentos en la base de datos
 	let id = req.params.id;
 	let body = req.body;
 	let statusUser = {
