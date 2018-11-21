@@ -1,4 +1,5 @@
-require('./config/config'); // Defining the port, it can be and environment port or a localhost port
+ require('./config/config'); // Defining the port, it can be and environment port or a localhost port
+const path = require('path');
 
 const express = require('express'); // A web infraestructure
 const mongoose = require('mongoose'); // To model our aplication data
@@ -9,6 +10,9 @@ app.use(express.urlencoded({ extended: false })) // Middleware: URL enconding co
 app.use(express.json()) //Middleware: Use json format 
 
 app.use(require('./routes/index')); //Configuracion global de rutas
+
+// Habilitar la carpeta public
+app.use(express.static(path.resolve(__dirname, '../public'))); // Agregamos el modulo path con el metodo resolve para arreglar la ruta
 
 mongoose.connect(process.env.URLDB, (err, res)=>{ // To connect our server to our database
 	if (err) throw err;
