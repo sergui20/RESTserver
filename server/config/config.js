@@ -20,7 +20,7 @@ process.env.URLDB = urlDB; // Esta sera la URL que usaremos en mongoose.connect 
 
 // Token config
 
-process.env.TOKEN_EXPIRE = 60 * 60 * 24 * 30; // Creamos variables de entorno para no mostrarlas al publico
+process.env.TOKEN_EXPIRE = '48h'; // Creamos variables de entorno para no mostrarlas al publico
 process.env.SEED_TOKEN = process.env.SEED_TOKEN || 'secret-SMlocal'; // Declaramos una variable global para nuestro SEED
 
 // Google Client ID
