@@ -16,6 +16,22 @@ let authorizationToken = (req, res, next)=> {
 	});
 };
 
+// Front-end verification
+let imgToken = (req, res, next)=>{
+	let token = req.query.token;
+
+	jwt.verify(token, process.env.SEED_TOKEN, (err, decodedData)=>{
+		if(err){
+			return res.status(401).json({
+				ok: false,
+				err
+			})
+		}
+
+		req.usuario = decodedData;
+		next();
+	})
+}
 
 let authorizationAdmin = (req, res, next)=> {
 	usuario = req.usuario;
@@ -33,5 +49,6 @@ let authorizationAdmin = (req, res, next)=> {
 
 module.exports = {
 	authorizationToken,
-	authorizationAdmin
+	authorizationAdmin,
+	imgToken
 }
