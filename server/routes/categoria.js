@@ -4,7 +4,7 @@ let { authorizationToken, authorizationAdmin } = require('../middlewares/author'
 
 let app = express();
 
-let Categoria = require('../models/categorias'); // Incluye la libreria Mongoose con el Schema Categoria
+let Categoria = require('../models/categorias');
 
 // Mostrar todas las categorias
 app.get('/categoria', authorizationToken, (req, res)=> {
