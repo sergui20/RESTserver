@@ -8,7 +8,7 @@ const app = express();
 const Usuario = require('../models/usuario');
 const Producto = require('../models/producto');
 
-app.use(fileUpload()); // Los archivos que se vayan a cargar se almacenan dentro de este middleware
+app.use(fileUpload());
 
 app.put('/upload/:tipo/:id', (req, res)=>{
 	let tipo = req.params.tipo;
@@ -64,15 +64,14 @@ app.put('/upload/:tipo/:id', (req, res)=>{
 	
 			let fileName = `${ userDB[0].nombre }-${ new Date().getMilliseconds() }.${ ext }`;
 	
-			file.mv(`server/uploads/${tipo}/${fileName}`, (err)=>{ // Nuestra imagen se mueve al directorio especificado
+			file.mv(`server/uploads/${tipo}/${fileName}`, (err)=>{
 				if (err) {
 					return res.status(500).json({
 						ok: false,
 						err
 					});
 				}
-		
-				// Subiendo nuestra foto desde express a nuestra base de datos Mongo
+				
 				userPic(id, res, fileName);
 			})
 		})
@@ -152,8 +151,8 @@ function productPic(id, res, fileName){
 function unlinkFile( picName, collection ){
 	let pathImg = path.resolve( __dirname, `../uploads/${ collection }/${ picName }` )
 
-	if( fs.existsSync(pathImg) ){ // Devuelve true o false si existe el path
-		fs.unlinkSync(pathImg); // Elimina el archivo pasandole la ruta por parametro
+	if( fs.existsSync(pathImg) ){
+		fs.unlinkSync(pathImg);
 	}
 }
 
