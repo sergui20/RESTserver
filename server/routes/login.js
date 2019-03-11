@@ -12,7 +12,7 @@ const app = express();
 app.post('/login', (req, res)=>{
 	let body = req.body;
 
-	Usuario.findOne({ email: body.email }, (err, userDB)=>{ //finOne busca un documento especifico en nuestra base de datos
+	Usuario.findOne({ email: body.email }, (err, userDB)=>{
 		if (err) {
 			return res.status(500).json({
 				ok: false,
@@ -29,7 +29,7 @@ app.post('/login', (req, res)=>{
 			});
 		}
 
-		if ( !bcrypt.compareSync( body.password, userDB.password ) ) { // Comparando si la contrasena es la misma al de los usuarios de nuestra base de datos usando una libreria que tiene como metodo compareSync
+		if ( !bcrypt.compareSync( body.password, userDB.password ) ) {
 			return res.status(400).json({
 				ok: false,
 				err: {
@@ -38,9 +38,9 @@ app.post('/login', (req, res)=>{
 			});
 		}
 
-		let token = jwt.sign({ // Generamos un token con los datos del usuario que buscamos arriba, le agregamos un SEED que es una clave secreta, y una fecha de expiracion
+		let token = jwt.sign({
 			usuario: userDB
-		}, process.env.SEED_TOKEN, { expiresIn: process.env.TOKEN_EXPIRE }) // expiresIn tiene como parametros(segundos, minutos, horas, dias)
+		}, process.env.SEED_TOKEN, { expiresIn: process.env.TOKEN_EXPIRE })
 
 		res.json({
 			ok: true,
@@ -55,9 +55,7 @@ app.post('/login', (req, res)=>{
 async function verify( token ) {
   const ticket = await client.verifyIdToken({
       idToken: token,
-      audience: process.env.CLIENT_ID,  // Specify the CLIENT_ID of the app that accesses the backend
-      // Or, if multiple clients access the backend:
-      //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
+      audience: process.env.CLIENT_ID,
   });
 
   const payload = ticket.getPayload();
@@ -109,7 +107,6 @@ app.post('/google', async (req, res)=>{
 				})
 			}
 		} else {
-			// Si el usuario no existe en nuestra base de datos
 			let usuario = new Usuario();
 
 			usuario.nombre = googleUser.nombre;
