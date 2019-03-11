@@ -10,7 +10,7 @@ app.get('/imagen/:tipo/:img', imgToken, (req, res)=>{
     let tipo = req.params.tipo;
     let img = req.params.img;
 
-    let pathImg = path.resolve(__dirname, `../uploads/${ tipo }/${ img }`); // El path.resolve toma como referencia un path principal, luego utiliza el path del archivo donde esta escrito y toma como referencia el segundo path, lo resuelve, y finalmente une esos paths para transformar en uno absoluto
+    let pathImg = path.resolve(__dirname, `../uploads/${ tipo }/${ img }`);
 
     console.log(fs.existsSync(pathImg));
 
