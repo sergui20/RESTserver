@@ -1,17 +1,17 @@
 const jwt = require('jsonwebtoken');
 
 let authorizationToken = (req, res, next)=> {
-	let token = req.get('token'); // Requerimos el token que se encuentra en el header de HTTP para podeer validarlo
+	let token = req.get('token');
 
-	jwt.verify( token, process.env.SEED_TOKEN, (err, decodeData)=>{ // Usamos jwt.verify que es un metodo que tiene esa libreria para verificar si el token sigue siendo el correcto en la pagina de /usuarios
-		if (err) {													// El token fue creado al momento de hacer signin en nuestra app
+	jwt.verify( token, process.env.SEED_TOKEN, (err, decodeData)=>{
+		if (err) {						
 			return res.status(401).json({
 				ok: false,
 				err
 			});
 		}
 
-		req.usuario = decodeData.usuario; // Creamos una instancia en el require llamada usuario para pasarle los datos del usuario que obtuvimos al DECODIFICAR el token
+		req.usuario = decodeData.usuario;
 		next();
 	});
 };
